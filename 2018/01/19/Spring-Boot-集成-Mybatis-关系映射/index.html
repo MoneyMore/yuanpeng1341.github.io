@@ -79,16 +79,17 @@
 
 
 
-<meta name="description" content="热爱技术与投机">
-<meta property="og:type" content="website">
-<meta property="og:title" content="九爷十三年">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta name="description" content="本章记录Mybatis的一对一，一对多映射。  在上一章《Spring Boot 集成 Mybatis (极简XML版)》用的工程做一些修改。 创建数据表123456789101112131415161718192021222324252627用户表CREATE TABLE `users` (  `id` bigint(20) NOT NULL AUTO_INCREMENT,  `usernam">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring Boot 集成 Mybatis 关系映射">
+<meta property="og:url" content="http://yoursite.com/2018/01/19/Spring-Boot-集成-Mybatis-关系映射/index.html">
 <meta property="og:site_name" content="九爷十三年">
-<meta property="og:description" content="热爱技术与投机">
+<meta property="og:description" content="本章记录Mybatis的一对一，一对多映射。  在上一章《Spring Boot 集成 Mybatis (极简XML版)》用的工程做一些修改。 创建数据表123456789101112131415161718192021222324252627用户表CREATE TABLE `users` (  `id` bigint(20) NOT NULL AUTO_INCREMENT,  `usernam">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-01-19T08:53:45.699Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="九爷十三年">
-<meta name="twitter:description" content="热爱技术与投机">
+<meta name="twitter:title" content="Spring Boot 集成 Mybatis 关系映射">
+<meta name="twitter:description" content="本章记录Mybatis的一对一，一对多映射。  在上一章《Spring Boot 集成 Mybatis (极简XML版)》用的工程做一些修改。 创建数据表123456789101112131415161718192021222324252627用户表CREATE TABLE `users` (  `id` bigint(20) NOT NULL AUTO_INCREMENT,  `usernam">
 
 
 
@@ -118,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/01/19/Spring-Boot-集成-Mybatis-关系映射/"/>
 
 
 
 
 
-  <title>九爷十三年</title>
+  <title>Spring Boot 集成 Mybatis 关系映射 | 九爷十三年</title>
   
 
 
@@ -143,8 +144,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-  page-home">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -237,9 +237,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -269,9 +269,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/01/19/Spring-Boot-集成-Mybatis-关系映射/" itemprop="url">Spring Boot 集成 Mybatis 关系映射</a></h1>
+          <h1 class="post-title" itemprop="name headline">Spring Boot 集成 Mybatis 关系映射</h1>
         
 
         <div class="post-meta">
@@ -335,6 +333,11 @@
           
 
           
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv">阅读
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>次
+            </span>
+          
 
           
 
@@ -353,9 +356,7 @@
       
 
       
-        
-          
-            <blockquote>
+        <blockquote>
 <p>本章记录Mybatis的一对一，一对多映射。</p>
 </blockquote>
 <p>在上一章<a href="http://www.spec-cc.com/2018/01/18/Spring-Boot-集成-Mybatis-极简XML版/" target="_blank" rel="noopener">《Spring Boot 集成 Mybatis (极简XML版)》</a>用的工程做一些修改。</p>
@@ -387,8 +388,6 @@
 <h4 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RunWith</span>(SpringRunner.class)</span><br><span class="line"><span class="meta">@SpringBootTest</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SpringBootMybatisXmlApplicationTests</span> </span>&#123;</span><br><span class="line">	<span class="meta">@Autowired</span></span><br><span class="line">	<span class="keyword">private</span> WebsitesMapper websitesMapper;</span><br><span class="line">	<span class="meta">@Autowired</span></span><br><span class="line">	<span class="keyword">private</span> UserMapper userMapper;</span><br><span class="line">	<span class="meta">@Autowired</span></span><br><span class="line">	<span class="keyword">private</span> DetailMapper detailMapper;</span><br><span class="line">	<span class="meta">@Autowired</span></span><br><span class="line">	<span class="keyword">private</span> RoleMapper roleMapper;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Test</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">findById</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		Website website = websitesMapper.findById(<span class="number">1</span>);</span><br><span class="line">		System.out.println(website);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Test</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">findUserById</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		User user = userMapper.findById(<span class="number">1L</span>);</span><br><span class="line">		System.out.println(user);</span><br><span class="line">		<span class="comment">//测试缓存是否起作用</span></span><br><span class="line">		user = userMapper.findById(<span class="number">1L</span>);</span><br><span class="line">		System.out.println(user);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Test</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">findUserAndDetailById</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		User user = userMapper.findUserAndDetailById(<span class="number">1L</span>);</span><br><span class="line">		Assert.assertNotNull(user) ;</span><br><span class="line">		System.out.println(<span class="string">"调用user.getDetail，测试延迟加载"</span>);</span><br><span class="line">		Assert.assertNotNull(user.getDetail()) ;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Test</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">findUserAndRoleById</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		User user = userMapper.findUserAndRoleById(<span class="number">1L</span>);</span><br><span class="line">		Assert.assertNotNull(user) ;</span><br><span class="line">		Assert.assertNotNull(user.getRoles()) ;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Test</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">findUserAndDetailAndRoleById</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		User user = userMapper.findUserAndDetailAndRoleById(<span class="number">1L</span>);</span><br><span class="line">		System.out.println(user);</span><br><span class="line">		System.out.println(user.getDetail());</span><br><span class="line">		System.out.println(user.getRoles());</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Test</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addRoleForUser</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		Map&lt;String, Object&gt; param = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">		param.put(<span class="string">"id"</span>, <span class="number">1L</span>);</span><br><span class="line">		param.put(<span class="string">"roles"</span>, Collections.singletonList(<span class="number">1</span>));</span><br><span class="line">		userMapper.addRoleForUser(param);</span><br><span class="line">		User user = userMapper.findUserAndRoleById(<span class="number">1L</span>);</span><br><span class="line">		System.out.println(user);</span><br><span class="line">		System.out.println(user.getDetail());</span><br><span class="line">		System.out.println(user.getRoles());</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Test</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">updateUserWithDetail</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		User user = userMapper.findById(<span class="number">1L</span>);</span><br><span class="line">		Detail detail = detailMapper.findById(<span class="number">1L</span>);</span><br><span class="line">		user.setDetail(detail);</span><br><span class="line">		userMapper.updateUserWithDetail(user);</span><br><span class="line">		user = userMapper.findUserAndDetailById(<span class="number">1L</span>);</span><br><span class="line">		System.out.println(user);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>结束~</p>
 
-          
-        
       
     </div>
     
@@ -405,170 +404,28 @@
       
 
       
-
-      
-
       
       
-        <div class="post-eof"></div>
+
       
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/18/Spring-Boot-集成-Mybatis-极简XML版/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="九爷">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="九爷十三年">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/01/18/Spring-Boot-集成-Mybatis-极简XML版/" itemprop="url">Spring Boot 集成 Mybatis (极简XML版)</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
             
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-18T16:47:30+08:00">
-                2018-01-18
-              </time>
+              <a href="/2018/01/18/Spring-Boot-集成-Mybatis-极简XML版/" rel="next" title="Spring Boot 集成 Mybatis (极简XML版)">
+                <i class="fa fa-chevron-left"></i> Spring Boot 集成 Mybatis (极简XML版)
+              </a>
             
+          </div>
 
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
             
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Spring-Boot/" itemprop="url" rel="index">
-                    <span itemprop="name">Spring Boot</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/01/18/Spring-Boot-集成-Mybatis-极简XML版/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2018/01/18/Spring-Boot-集成-Mybatis-极简XML版/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
+          </div>
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          <blockquote>
-<p>相比注解版，该版本将SQL放到了XML中统一管理</p>
-</blockquote>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/01/18/Spring-Boot-集成-Mybatis-极简XML版/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -578,333 +435,25 @@
   </article>
 
 
-    
-      
 
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/18/Spring-Boot-集成-Mybatis-注解版/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="九爷">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="九爷十三年">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/01/18/Spring-Boot-集成-Mybatis-注解版/" itemprop="url">Spring Boot 集成 Mybatis (注解版)</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-18T15:37:49+08:00">
-                2018-01-18
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Spring-Boot/" itemprop="url" rel="index">
-                    <span itemprop="name">Spring Boot</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/01/18/Spring-Boot-集成-Mybatis-注解版/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2018/01/18/Spring-Boot-集成-Mybatis-注解版/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <blockquote>
-<p>喜欢用Spring Boot的几乎都不喜欢XML配置，而Mybatis最初也有一堆XML配置，不过在跟Spring Boot接触后也开始被去繁就简了——基于注解的Mybatis (单体项目不推荐)。</p>
-</blockquote>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/01/18/Spring-Boot-集成-Mybatis-注解版/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
+    <div class="post-spread">
       
     </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
   </div>
-  
-  
-  
-  </article>
 
 
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/17/Spring-Cloud-Eureka运用与理解/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="九爷">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="九爷十三年">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/01/17/Spring-Cloud-Eureka运用与理解/" itemprop="url">Spring Cloud Eureka运用与理解</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-17T14:31:13+08:00">
-                2018-01-17
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Spring-Cloud/" itemprop="url" rel="index">
-                    <span itemprop="name">Spring Cloud</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/01/17/Spring-Cloud-Eureka运用与理解/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2018/01/17/Spring-Cloud-Eureka运用与理解/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <blockquote>
-<p>Spring Cloud Eureka 是基于 Netflix Eureka 做的二次封装，主要负责完成微服务架构中的服务治理功能。</p>
-</blockquote>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/01/17/Spring-Cloud-Eureka运用与理解/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
           </div>
-          <!--/noindex-->
-        
-      
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
     </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-  </section>
-
   
 
 
-          </div>
-          
-
-
-          
 
         </div>
         
@@ -925,8 +474,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -981,6 +539,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#创建数据表"><span class="nav-number">1.</span> <span class="nav-text">创建数据表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#创建实体类"><span class="nav-number">2.</span> <span class="nav-text">创建实体类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#创建mapper-xml"><span class="nav-number">3.</span> <span class="nav-text">创建mapper.xml</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#编写detailMapper-xml"><span class="nav-number">3.1.</span> <span class="nav-text">编写detailMapper.xml</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#编写roleMapper-xml"><span class="nav-number">3.2.</span> <span class="nav-text">编写roleMapper.xml</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#编写userMapper-xml"><span class="nav-number">3.3.</span> <span class="nav-text">编写userMapper.xml</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#创建mapper接口"><span class="nav-number">4.</span> <span class="nav-text">创建mapper接口</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#编写DetailMpper-java"><span class="nav-number">4.1.</span> <span class="nav-text">编写DetailMpper.java</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#编写RoleMapper-java"><span class="nav-number">4.2.</span> <span class="nav-text">编写RoleMapper.java</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#编写UserMapper-java"><span class="nav-number">4.3.</span> <span class="nav-text">编写UserMapper.java</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#测试"><span class="nav-number">5.</span> <span class="nav-text">测试</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -1122,6 +696,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
