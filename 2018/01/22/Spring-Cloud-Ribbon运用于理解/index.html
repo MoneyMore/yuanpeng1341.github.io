@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/cc.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/cc32.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/cc16.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Spring Cloud Ribbon是基于HTTP和TCP的客户端负载均衡工具，基于Netflix Ribbon实现。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring Cloud Ribbon运用于理解">
+<meta property="og:url" content="http://yoursite.com/2018/01/22/Spring-Cloud-Ribbon运用于理解/index.html">
+<meta property="og:site_name" content="九爷十三年">
+<meta property="og:description" content="Spring Cloud Ribbon是基于HTTP和TCP的客户端负载均衡工具，基于Netflix Ribbon实现。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-01-22T07:22:43.435Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spring Cloud Ribbon运用于理解">
+<meta name="twitter:description" content="Spring Cloud Ribbon是基于HTTP和TCP的客户端负载均衡工具，基于Netflix Ribbon实现。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/01/22/Spring-Cloud-Ribbon运用于理解/"/>
+
+
+
+
+
+  <title>Spring Cloud Ribbon运用于理解 | 九爷十三年</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">九爷十三年</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/22/Spring-Cloud-Ribbon运用于理解/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="九爷">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="九爷十三年">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Spring Cloud Ribbon运用于理解</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-22T14:09:58+08:00">
+                2018-01-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Spring-Cloud/" itemprop="url" rel="index">
+                    <span itemprop="name">Spring Cloud</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/01/22/Spring-Cloud-Ribbon运用于理解/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2018/01/22/Spring-Cloud-Ribbon运用于理解/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv">阅读
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>次
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>Spring Cloud Ribbon是基于HTTP和TCP的客户端负载均衡工具，基于Netflix Ribbon实现。</p>
+</blockquote>
+<a id="more"></a>
+<h4 id="运用"><a href="#运用" class="headerlink" title="运用"></a>运用</h4><p>Ribbon的运用很简单。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="meta">@LoadBalanced</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> RestTemplate <span class="title">restTemplate</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">new</span> RestTemplate();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其实就是通过RestTemplate来实现客户端负载均衡。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RibbonController</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> RestTemplate restTemplate;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping</span>(<span class="string">"/"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getInfo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> restTemplate.getForObject(<span class="string">"http://SPRING-CLOUD-SERVER-PROVIDER:8080/"</span>, String.class);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h4><p>通过<code>@LoadBalanced</code>源码注释可以知道使用<code>LoadBalancerClient</code>配置<code>RestTemplate</code>来实现负载均衡。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">LoadBalancerClient</span> <span class="keyword">extends</span> <span class="title">ServiceInstanceChooser</span> </span>&#123;</span><br><span class="line">	&lt;T&gt; <span class="function">T <span class="title">execute</span><span class="params">(String serviceId, LoadBalancerRequest&lt;T&gt; request)</span> <span class="keyword">throws</span> IOException</span>;</span><br><span class="line">	&lt;T&gt; <span class="function">T <span class="title">execute</span><span class="params">(String serviceId, ServiceInstance serviceInstance, LoadBalancerRequest&lt;T&gt; request)</span> <span class="keyword">throws</span> IOException</span>;</span><br><span class="line">	<span class="function">URI <span class="title">reconstructURI</span><span class="params">(ServiceInstance instance, URI original)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">ServiceInstanceChooser</span> </span>&#123;</span><br><span class="line">    <span class="function">ServiceInstance <span class="title">choose</span><span class="params">(String serviceId)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<ul>
+<li>ServiceInstance choose(String serviceId)：根据服务名，从负载均衡器中挑选一个对应的服务实例。</li>
+<li>execute(String serviceId, LoadBalancerRequest<t> request)：使用挑选出来的服务名来执行请求。</t></li>
+<li>reconstructURI(ServiceInstance instance, URI original)：根据服务实例构建一个<code>host:port</code>形式的URI</li>
+</ul>
+</blockquote>
+<h5 id="LoadBalancerAutoConfiguration-java源码"><a href="#LoadBalancerAutoConfiguration-java源码" class="headerlink" title="LoadBalancerAutoConfiguration.java源码"></a>LoadBalancerAutoConfiguration.java源码</h5><p>在来看负载均衡器的配置类<code>LoadBalancerAutoConfiguration.java</code>。</p>
+<p>可以看到创建了一个<code>LoadBalancerInterceptor</code>和<code>RestTemplateCustomer</code>的bean。</p>
+<blockquote>
+<ul>
+<li>restTemplates 维护被<code>@LoadBalanced</code>注解修饰的RestTemplate对象列表。在初始化时，调用<code>RestTemplateCustomizer</code>为<code>RestTemplate</code>添加<code>LoadBalancerInterceptor</code>拦截器。</li>
+<li>LoadBalancerInterceptor 实现对客户端的请求进行拦截。</li>
+<li>RestTemplateCustomizer 给RestTemplate添加LoadBalancerInterceptor拦截器。</li>
+</ul>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@ConditionalOnClass</span>(RestTemplate.class)</span><br><span class="line"><span class="meta">@ConditionalOnBean</span>(LoadBalancerClient.class)</span><br><span class="line"><span class="meta">@EnableConfigurationProperties</span>(LoadBalancerRetryProperties.class)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LoadBalancerAutoConfiguration</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@LoadBalanced</span></span><br><span class="line">	<span class="meta">@Autowired</span>(required = <span class="keyword">false</span>)</span><br><span class="line">	<span class="keyword">private</span> List&lt;RestTemplate&gt; restTemplates = Collections.emptyList();</span><br><span class="line">  	<span class="meta">@Bean</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> SmartInitializingSingleton <span class="title">loadBalancedRestTemplateInitializer</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">			<span class="keyword">final</span> List&lt;RestTemplateCustomizer&gt; customizers)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">new</span> SmartInitializingSingleton() &#123;</span><br><span class="line">			<span class="meta">@Override</span></span><br><span class="line">			<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">afterSingletonsInstantiated</span><span class="params">()</span> </span>&#123;</span><br><span class="line">				<span class="keyword">for</span> (RestTemplate restTemplate : LoadBalancerAutoConfiguration.<span class="keyword">this</span>.restTemplates) &#123;</span><br><span class="line">					<span class="keyword">for</span> (RestTemplateCustomizer customizer : customizers) &#123;</span><br><span class="line">						customizer.customize(restTemplate);</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//...</span></span><br><span class="line">	<span class="meta">@Configuration</span></span><br><span class="line">	<span class="meta">@ConditionalOnMissingClass</span>(<span class="string">"org.springframework.retry.support.RetryTemplate"</span>)</span><br><span class="line">	<span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">LoadBalancerInterceptorConfig</span> </span>&#123;</span><br><span class="line">		<span class="meta">@Bean</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> LoadBalancerInterceptor <span class="title">ribbonInterceptor</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">				LoadBalancerClient loadBalancerClient,</span></span></span><br><span class="line"><span class="function"><span class="params">				LoadBalancerRequestFactory requestFactory)</span> </span>&#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="keyword">new</span> LoadBalancerInterceptor(loadBalancerClient, requestFactory);</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="meta">@Bean</span></span><br><span class="line">		<span class="meta">@ConditionalOnMissingBean</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> RestTemplateCustomizer <span class="title">restTemplateCustomizer</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">				<span class="keyword">final</span> LoadBalancerInterceptor loadBalancerInterceptor)</span> </span>&#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="keyword">new</span> RestTemplateCustomizer() &#123;</span><br><span class="line">				<span class="meta">@Override</span></span><br><span class="line">				<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">customize</span><span class="params">(RestTemplate restTemplate)</span> </span>&#123;</span><br><span class="line">					List&lt;ClientHttpRequestInterceptor&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;(</span><br><span class="line">							restTemplate.getInterceptors());</span><br><span class="line">					list.add(loadBalancerInterceptor);</span><br><span class="line">					restTemplate.setInterceptors(list);</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="LoadBalancerInterceptor-java源码"><a href="#LoadBalancerInterceptor-java源码" class="headerlink" title="LoadBalancerInterceptor.java源码"></a>LoadBalancerInterceptor.java源码</h5><p>再看看<code>LoadBalancerInterceptor.java</code>的源码</p>
+<blockquote>
+<p>当被<code>@LoadBalanced</code>注解修饰过得<code>RestTemplate</code>发起请求时，会被<code>LoadBalancerInterceptor</code>类的<code>intercept</code>方法拦截。这时候因为使用restTemplate发起请求时传入的是服务名作为host，所以可以直接使用<code>HttpRequest#getURI()#getHost()</code>获取服务名，然后调用<code>execute</code>方法发起请求。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LoadBalancerInterceptor</span> <span class="keyword">implements</span> <span class="title">ClientHttpRequestInterceptor</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">private</span> LoadBalancerClient loadBalancer;</span><br><span class="line">	<span class="keyword">private</span> LoadBalancerRequestFactory requestFactory;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">LoadBalancerInterceptor</span><span class="params">(LoadBalancerClient loadBalancer, LoadBalancerRequestFactory requestFactory)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.loadBalancer = loadBalancer;</span><br><span class="line">		<span class="keyword">this</span>.requestFactory = requestFactory;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">LoadBalancerInterceptor</span><span class="params">(LoadBalancerClient loadBalancer)</span> </span>&#123;</span><br><span class="line">		<span class="comment">// for backwards compatibility</span></span><br><span class="line">		<span class="keyword">this</span>(loadBalancer, <span class="keyword">new</span> LoadBalancerRequestFactory(loadBalancer));</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> ClientHttpResponse <span class="title">intercept</span><span class="params">(<span class="keyword">final</span> HttpRequest request, <span class="keyword">final</span> <span class="keyword">byte</span>[] body,</span></span></span><br><span class="line"><span class="function"><span class="params">			<span class="keyword">final</span> ClientHttpRequestExecution execution)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">		<span class="keyword">final</span> URI originalUri = request.getURI();</span><br><span class="line">		String serviceName = originalUri.getHost();</span><br><span class="line">		Assert.state(serviceName != <span class="keyword">null</span>, <span class="string">"Request URI does not contain a valid hostname: "</span> + originalUri);</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">this</span>.loadBalancer.execute(serviceName, requestFactory.createRequest(request, body, execution));</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="RibbonLoadBalancerClient"><a href="#RibbonLoadBalancerClient" class="headerlink" title="RibbonLoadBalancerClient"></a>RibbonLoadBalancerClient</h5><p>经过上面的分析发现<code>LoadBalancerClient.java</code>只是一个抽象接口，现在看看它的实现类<code>org.springframework.cloud.netflix.ribbon.RibbonLoadBalancerClient</code>。</p>
+<blockquote>
+<p>通过<code>Server server = getServer(loadBalancer)</code>可以知道执行请求的时候先根据传入的服务名去获取服务实例。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> &lt;T&gt; <span class="function">T <span class="title">execute</span><span class="params">(String serviceId, LoadBalancerRequest&lt;T&gt; request)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">	ILoadBalancer loadBalancer = getLoadBalancer(serviceId);</span><br><span class="line">	Server server = getServer(loadBalancer);</span><br><span class="line">	<span class="keyword">if</span> (server == <span class="keyword">null</span>) &#123;</span><br><span class="line">		<span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"No instances available for "</span> + serviceId);</span><br><span class="line">	&#125;</span><br><span class="line">	RibbonServer ribbonServer = <span class="keyword">new</span> RibbonServer(serviceId, server, isSecure(server,</span><br><span class="line">				serviceId), serverIntrospector(serviceId).getMetadata(server));</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> execute(serviceId, ribbonServer, request);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">protected</span> Server <span class="title">getServer</span><span class="params">(ILoadBalancer loadBalancer)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (loadBalancer == <span class="keyword">null</span>) &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> loadBalancer.chooseServer(<span class="string">"default"</span>); <span class="comment">// <span class="doctag">TODO:</span> better handling of key</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="ILoadBalancer"><a href="#ILoadBalancer" class="headerlink" title="ILoadBalancer"></a>ILoadBalancer</h5><p>通过<code>loadBalancer.chooseServer</code>可以知道这里选择服务实例的时候使用的是<code>com.netflix.loadbalancerILoadBalancer</code>接口中的<code>chooseServer</code>方法，而不是使用<code>org.springframework.cloud.client.loadbalancer.LoadBalancerClient</code>接口中的<code>choose</code>方法。</p>
+<blockquote>
+<ul>
+<li>addServers：向负载均衡器中维护的实例列表增加服务实例。</li>
+<li>chooseServer：从负载均衡器中挑选一个实例。</li>
+<li>markServerDown：标记某个服务已经停止服务，防止下一次继续获取该服务。</li>
+<li>getReachableServers：获取所有正常的服务列表。</li>
+<li>getAllServers：获取所有的服务列表(正常和不正常的)。</li>
+</ul>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">ILoadBalancer</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addServers</span><span class="params">(List&lt;Server&gt; newServers)</span></span>;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> Server <span class="title">chooseServer</span><span class="params">(Object key)</span></span>;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">markServerDown</span><span class="params">(Server server)</span></span>;</span><br><span class="line">	<span class="meta">@Deprecated</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> List&lt;Server&gt; <span class="title">getServerList</span><span class="params">(<span class="keyword">boolean</span> availableOnly)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;Server&gt; <span class="title">getReachableServers</span><span class="params">()</span></span>;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> List&lt;Server&gt; <span class="title">getAllServers</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>未完…</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/01/19/Spring-Boot-集成-Mybatis-关系映射/" rel="next" title="Spring Boot 集成 Mybatis 关系映射">
+                <i class="fa fa-chevron-left"></i> Spring Boot 集成 Mybatis 关系映射
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpeg"
+                alt="九爷" />
+            
+              <p class="site-author-name" itemprop="name">九爷</p>
+              <p class="site-description motion-element" itemprop="description">热爱技术与投机</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#运用"><span class="nav-number">1.</span> <span class="nav-text">运用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#源码分析"><span class="nav-number">2.</span> <span class="nav-text">源码分析</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#LoadBalancerAutoConfiguration-java源码"><span class="nav-number">2.1.</span> <span class="nav-text">LoadBalancerAutoConfiguration.java源码</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#LoadBalancerInterceptor-java源码"><span class="nav-number">2.2.</span> <span class="nav-text">LoadBalancerInterceptor.java源码</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#RibbonLoadBalancerClient"><span class="nav-number">2.3.</span> <span class="nav-text">RibbonLoadBalancerClient</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#ILoadBalancer"><span class="nav-number">2.4.</span> <span class="nav-text">ILoadBalancer</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">九爷</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'GOYxQYgLEV1b0jtdp115Tbsy-gzGzoHsz',
+        appKey: 'uqw4dioUI5x2yd5Ld9674okX',
+        placeholder: '和谐社会，理性评论!!!',
+        avatar:'wavatar',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
